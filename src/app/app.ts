@@ -1,6 +1,7 @@
-import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer} from 'three';
 import { Brick } from './brick';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
 export class App {
   private readonly scene = new Scene();
@@ -11,11 +12,29 @@ export class App {
   });
   private controls = new OrbitControls(this.camera, this.renderer.domElement );
 
-  private brick: Brick;
-
   constructor() {
-    this.brick = new Brick(100, new Color('rgb(255,0,0)'));
-    this.scene.add(this.brick);
+    var loader = new GLTFLoader();
+    var that = this;
+    loader.load(
+        "/assets/BMW27GE.glb",
+        function ( gltf ) {
+          var lights = [];
+          lights[ 0 ] = new PointLight( 0xffffff, .4, 0 );
+          lights[ 1 ] = new PointLight( 0xffffff, .3, 0 );
+          lights[ 2 ] = new PointLight( 0xffffff, .8, 0 );
+
+          lights[ 0 ].position.set( 0, 200, 0 );
+          lights[ 1 ].position.set( 100, 200, 100 );
+          lights[ 2 ].position.set( - 100, - 200, - 100 );
+
+          that.scene.add( lights[ 0 ] );
+          that.scene.add( lights[ 1 ] );
+          that.scene.add( lights[ 2 ] );
+
+          console.log(gltf.scene);
+          that.scene.add(gltf.scene);
+        },
+    );
 
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
