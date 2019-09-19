@@ -1,5 +1,6 @@
 import { Color, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { Brick } from './brick';
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 export class App {
   private readonly scene = new Scene();
@@ -8,6 +9,7 @@ export class App {
     antialias: true,
     canvas: document.getElementById('main-canvas') as HTMLCanvasElement,
   });
+  private controls = new OrbitControls(this.camera, this.renderer.domElement );
 
   private brick: Brick;
 
@@ -17,6 +19,8 @@ export class App {
 
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
+
+    this.controls.update();
 
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.setClearColor(new Color('rgb(0,0,0)'));
@@ -31,10 +35,11 @@ export class App {
   }
 
   private render() {
+    this.controls.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => this.render());
 
     this.adjustCanvasSize();
-    this.brick.rotateY(0.03);
+    // this.brick.rotateY(0.03);
   }
 }
