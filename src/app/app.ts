@@ -3,6 +3,7 @@ import {Brick} from './brick';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
+import {MTLLoader} from "three/examples/jsm/loaders/MTLLoader";
 
 export class App {
   private readonly scene = new Scene();
@@ -39,20 +40,25 @@ export class App {
     //     },
     // );
 
-
+    var mtlLoader = new MTLLoader();
     var objLoader = new OBJLoader();
-    objLoader.load(
-      'assets/lab.obj',
-      function (object: any) {
-        that.scene.add(object.children[0]);
-      },
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-      },
-      function (error) {
-        console.log('An error happened');
-      }
-    );
+
+    mtlLoader.load('assets/car.mtl', function (material) {
+      objLoader.setMaterials(material);
+      objLoader.load(
+        'assets/car.obj',
+        function (object: any) {
+          that.scene.add(object);
+        },
+        function (xhr) {
+          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        function (error) {
+          console.log('An error happened');
+        }
+      );
+    });
+
 
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
