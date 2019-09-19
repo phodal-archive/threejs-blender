@@ -1,40 +1,57 @@
 import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer} from 'three';
-import { Brick } from './brick';
+import {Brick} from './brick';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
 
 export class App {
   private readonly scene = new Scene();
-  private readonly camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 10000);
+  private readonly camera = new PerspectiveCamera(1, innerWidth / innerHeight, 100, 1000);
   private readonly renderer = new WebGLRenderer({
     antialias: true,
     canvas: document.getElementById('main-canvas') as HTMLCanvasElement,
   });
-  private controls = new OrbitControls(this.camera, this.renderer.domElement );
+  private controls = new OrbitControls(this.camera, this.renderer.domElement);
 
   constructor() {
     var loader = new GLTFLoader();
     var that = this;
+
+    var lights = [];
+    lights[0] = new PointLight(0xeeeeee, .4, 0);
+    lights[1] = new PointLight(0xffffff, .3, 0);
+    lights[2] = new PointLight(0xffffff, .8, 0);
+
+    lights[0].position.set(0, 200, 0);
+    lights[1].position.set(100, 200, 100);
+    lights[2].position.set(-100, -200, -100);
+
+    that.scene.add(lights[0]);
+    that.scene.add(lights[1]);
+    that.scene.add(lights[2]);
+
     loader.load(
         "/assets/BMW27GE.glb",
         function ( gltf ) {
-          var lights = [];
-          lights[ 0 ] = new PointLight( 0xffffff, .4, 0 );
-          lights[ 1 ] = new PointLight( 0xffffff, .3, 0 );
-          lights[ 2 ] = new PointLight( 0xffffff, .8, 0 );
-
-          lights[ 0 ].position.set( 0, 200, 0 );
-          lights[ 1 ].position.set( 100, 200, 100 );
-          lights[ 2 ].position.set( - 100, - 200, - 100 );
-
-          that.scene.add( lights[ 0 ] );
-          that.scene.add( lights[ 1 ] );
-          that.scene.add( lights[ 2 ] );
-
           console.log(gltf.scene);
-          that.scene.add(gltf.scene);
+          that.scene.add(gltf.scene.children[0]);
         },
     );
+
+    //
+    // var objLoader = new OBJLoader();
+    // objLoader.load(
+    //   'assets/lab.obj',
+    //   function (object: any) {
+    //     that.scene.add(object.children[0]);
+    //   },
+    //   function (xhr) {
+    //     console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    //   },
+    //   function (error) {
+    //     console.log('An error happened');
+    //   }
+    // );
 
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
