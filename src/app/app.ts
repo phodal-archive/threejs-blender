@@ -18,7 +18,8 @@ export class App {
     var that = this;
 
     var lights = [];
-    lights[0] = new PointLight(0xeeeeee, .4, 0);
+    var color = '#ff6842';
+    lights[0] = new PointLight(0xff6842, 1, 0);
     lights[1] = new PointLight(0xffffff, .3, 0);
     lights[2] = new PointLight(0xffffff, .8, 0);
 
@@ -29,29 +30,29 @@ export class App {
     that.scene.add(lights[0]);
     that.scene.add(lights[1]);
     that.scene.add(lights[2]);
-
-    loader.load(
-        "/assets/BMW27GE.glb",
-        function ( gltf ) {
-          console.log(gltf.scene);
-          that.scene.add(gltf.scene.children[0]);
-        },
-    );
-
     //
-    // var objLoader = new OBJLoader();
-    // objLoader.load(
-    //   'assets/lab.obj',
-    //   function (object: any) {
-    //     that.scene.add(object.children[0]);
-    //   },
-    //   function (xhr) {
-    //     console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    //   },
-    //   function (error) {
-    //     console.log('An error happened');
-    //   }
+    // loader.load(
+    //     "/assets/car.glb",
+    //     function ( gltf ) {
+    //       console.log(gltf.scene);
+    //       that.scene.add(gltf.scene.children[1]);
+    //     },
     // );
+
+
+    var objLoader = new OBJLoader();
+    objLoader.load(
+      'assets/lab.obj',
+      function (object: any) {
+        that.scene.add(object.children[0]);
+      },
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      },
+      function (error) {
+        console.log('An error happened');
+      }
+    );
 
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
