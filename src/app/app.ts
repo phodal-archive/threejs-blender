@@ -12,7 +12,7 @@ export class App {
     antialias: true,
     canvas: document.getElementById('main-canvas') as HTMLCanvasElement,
   });
-  private controls = new OrbitControls(this.camera, this.renderer.domElement);
+  private orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
 
   constructor() {
     var loader = new GLTFLoader();
@@ -63,7 +63,7 @@ export class App {
     this.camera.position.set(200, 200, 200);
     this.camera.lookAt(new Vector3(0, 0, 0));
 
-    this.controls.update();
+    this.orbitControls.update();
 
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.setClearColor(new Color('rgb(0,0,0)'));
@@ -78,7 +78,7 @@ export class App {
   }
 
   private render() {
-    this.controls.update();
+    this.orbitControls.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => this.render());
 
