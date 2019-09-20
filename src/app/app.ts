@@ -1,6 +1,6 @@
-import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer} from 'three';
+import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer, Math} from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DeviceOrientationControls} from "three/examples/jsm/controls/DeviceOrientationControls";
 
 export class App {
@@ -12,7 +12,9 @@ export class App {
   });
   private orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
   // @ts-ignore
-  private deviceOrientationControls: DeviceOrientationControls;
+  private deviceOrientationControls = new DeviceOrientationControls(this.camera);
+  // @ts-ignore
+  private carScene: Scene;
 
   constructor() {
     var loader = new GLTFLoader();
@@ -20,8 +22,8 @@ export class App {
 
     var lights = [];
     lights[0] = new PointLight(0xff6842, 1, 0);
-    lights[1] = new PointLight(0xffffff, .3, 0);
-    lights[2] = new PointLight(0xffffff, .8, 0);
+    lights[1] = new PointLight(0xffdd00, 1, 0);
+    lights[2] = new PointLight(0xffffff, 1, 0);
 
     lights[0].position.set(0, 200, 0);
     lights[1].position.set(100, 200, 100);
@@ -32,11 +34,12 @@ export class App {
     that.scene.add(lights[2]);
 
     loader.load(
-        "/assets/car.gltf",
-        function ( gltf ) {
-          console.log(gltf.scene);
-          that.scene.add(gltf.scene);
-        },
+      "/assets/car.gltf",
+      function (gltf: GLTF) {
+        console.log(gltf.scene);
+        that.carScene = gltf.scene;
+        that.scene.add(gltf.scene);
+      },
     );
 
     // var mtlLoader = new MTLLoader();
@@ -63,7 +66,7 @@ export class App {
     this.camera.lookAt(new Vector3(0, 0, 0));
 
     this.orbitControls.update();
-    window.addEventListener('deviceorientation', this.setDeviceOrientationControls, true);
+    window.addEventListener('deviceorientation', this.setDeviceOrientationControls.bind(this), true);
 
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.setClearColor(new Color('rgb(0,0,0)'));
@@ -71,11 +74,18 @@ export class App {
     this.render();
   }
 
-
-  setDeviceOrientationControls(e: any) {
+  setDeviceOrientationControls(e: DeviceOrientationEvent) {
+    console.log(e);
     this.deviceOrientationControls = new DeviceOrientationControls(this.camera);
     this.deviceOrientationControls.connect();
     this.deviceOrientationControls.update();
+    var alphaRotation = e.alpha ? Math.degToRad(e.alpha) : 0;
+    var betaRotation = e.beta ? Math.degToRad(e.beta) : 0;
+    var gammaRotation = e.gamma ? Math.degToRad(e.gamma) : 0;
+
+    this.carScene.rotation.x = alphaRotation;
+    this.carScene.rotation.z = betaRotation;
+    this.carScene.rotation.y = gammaRotation;
     window.removeEventListener('deviceorientation', this.setDeviceOrientationControls, true);
   }
 
