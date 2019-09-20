@@ -1,7 +1,9 @@
-import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer, Math} from 'three';
+import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer} from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {DeviceOrientationControls} from "three/examples/jsm/controls/DeviceOrientationControls";
+
+import * as THREE from 'three';
 
 export class App {
   private readonly scene = new Scene();
@@ -75,17 +77,16 @@ export class App {
   }
 
   setDeviceOrientationControls(e: DeviceOrientationEvent) {
-    console.log(e);
     this.deviceOrientationControls = new DeviceOrientationControls(this.camera);
     this.deviceOrientationControls.connect();
     this.deviceOrientationControls.update();
-    var alphaRotation = e.alpha ? Math.degToRad(e.alpha) : 0;
-    var betaRotation = e.beta ? Math.degToRad(e.beta) : 0;
-    var gammaRotation = e.gamma ? Math.degToRad(e.gamma) : 0;
+    var alphaRotation = e.alpha ? THREE.Math.degToRad(e.alpha) : 0;
+    var betaRotation = e.beta ? THREE.Math.degToRad(e.beta) : 0;
+    var gammaRotation = e.gamma ? THREE.Math.degToRad(e.gamma) : 0;
 
-    this.carScene.rotation.x = alphaRotation;
-    this.carScene.rotation.z = betaRotation;
+    this.carScene.rotation.x = betaRotation;
     this.carScene.rotation.y = gammaRotation;
+    // this.carScene.rotation.z = alphaRotation;
     window.removeEventListener('deviceorientation', this.setDeviceOrientationControls, true);
   }
 
