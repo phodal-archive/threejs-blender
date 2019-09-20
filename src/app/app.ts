@@ -5,6 +5,9 @@ import {DeviceOrientationControls} from "three/examples/jsm/controls/DeviceOrien
 
 import * as THREE from 'three';
 
+const Stats = require('stats.js');
+
+
 export class App {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera(1, innerWidth / innerHeight, 100, 1000);
@@ -17,6 +20,7 @@ export class App {
   private deviceOrientationControls = new DeviceOrientationControls(this.camera);
   // @ts-ignore
   private carScene: Scene;
+  private stats = new Stats();
 
   constructor() {
     var loader = new GLTFLoader();
@@ -73,6 +77,9 @@ export class App {
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.setClearColor(new Color('rgb(0,0,0)'));
 
+    this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild(this.stats.dom);
+
     this.render();
   }
 
@@ -97,9 +104,13 @@ export class App {
   }
 
   private render() {
+    this.stats.begin();
+
     this.orbitControls.update();
     // this.deviceOrientationControls.update();
     this.renderer.render(this.scene, this.camera);
+
+    this.stats.end();
     requestAnimationFrame(() => this.render());
 
     this.adjustCanvasSize();
