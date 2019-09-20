@@ -7,3 +7,4 @@ dist
 #*.obj
 assets/
 tests/car.min.js
+tests/car.js
