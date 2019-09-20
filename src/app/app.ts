@@ -1,9 +1,7 @@
 import {Color, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer} from 'three';
-import {Brick} from './brick';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
-import {MTLLoader} from "three/examples/jsm/loaders/MTLLoader";
+import {DeviceOrientationControls} from "three/examples/jsm/controls/DeviceOrientationControls";
 
 export class App {
   private readonly scene = new Scene();
@@ -13,6 +11,7 @@ export class App {
     canvas: document.getElementById('main-canvas') as HTMLCanvasElement,
   });
   private orbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+  private deviceOrientationControls = new DeviceOrientationControls(this.camera);
 
   constructor() {
     var loader = new GLTFLoader();
@@ -79,6 +78,7 @@ export class App {
 
   private render() {
     this.orbitControls.update();
+    this.deviceOrientationControls.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => this.render());
 
