@@ -6,3 +6,4 @@ dist
 *.glb
 #*.obj
 assets/
+tests/car.min.js

@@ -31,33 +31,33 @@ export class App {
     that.scene.add(lights[0]);
     that.scene.add(lights[1]);
     that.scene.add(lights[2]);
+
+    loader.load(
+        "/assets/car.gltf.glb",
+        function ( gltf ) {
+          console.log(gltf.scene);
+          that.scene.add(gltf.scene);
+        },
+    );
+
+    // var mtlLoader = new MTLLoader();
+    // var objLoader = new OBJLoader();
     //
-    // loader.load(
-    //     "/assets/car.glb",
-    //     function ( gltf ) {
-    //       console.log(gltf.scene);
-    //       that.scene.add(gltf.scene.children[1]);
+    // mtlLoader.load('assets/car.mtl', function (material) {
+    //   objLoader.setMaterials(material);
+    //   objLoader.load(
+    //     'assets/car.obj',
+    //     function (object: any) {
+    //       that.scene.add(object);
     //     },
-    // );
-
-    var mtlLoader = new MTLLoader();
-    var objLoader = new OBJLoader();
-
-    mtlLoader.load('assets/car.mtl', function (material) {
-      objLoader.setMaterials(material);
-      objLoader.load(
-        'assets/car.obj',
-        function (object: any) {
-          that.scene.add(object);
-        },
-        function (xhr) {
-          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-        function (error) {
-          console.log('An error happened');
-        }
-      );
-    });
+    //     function (xhr) {
+    //       console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    //     },
+    //     function (error) {
+    //       console.log('An error happened');
+    //     }
+    //   );
+    // });
 
 
     this.camera.position.set(200, 200, 200);
