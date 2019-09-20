@@ -1,0 +1,15 @@
+THREE[_0xd7ca[0]] = function () {
+  this[_0xd7ca[1]] = function () {
+  };
+  this[_0xd7ca[2]] = function () {
+  };
+  this[_0xd7ca[3]] = function () {
+  };
+  this[_0xd7ca[4]] = function () {
+  };
+  this[_0xd7ca[5]] = function () {
+  };
+  this[_0xd7ca[6]] = {};
+  this[_0xd7ca[7]] = {};
+  this[addGeometryHandler](_0xd7ca[8], THREE.JSONLoader);
+};
